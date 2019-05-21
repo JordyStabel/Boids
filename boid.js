@@ -11,6 +11,7 @@ class Boid {
     this.maxForce = 0.2;
     this.maxSpeed = 4;
     this.color = color(0);
+    this.textfield = new Textfield(x, y);
   }
 
   edges() {
@@ -144,6 +145,10 @@ class Boid {
     this.velocity.add(this.acceleration);
     this.velocity.limit(this.maxSpeed);
     this.acceleration.mult(0);
+    this.textfield.update(this.position.x, this.position.y);
+
+    noStroke();
+    this.textfield.show();
   }
 
   show() {
