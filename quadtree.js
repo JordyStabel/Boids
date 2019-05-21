@@ -130,6 +130,8 @@ class QuadTree {
     for (let p of this.points) {
       count++;
       searchedPoints.push(p);
+
+      totalLoopCount++;
       if (range.contains(p)) {
         foundPoints.push(p);
       }
@@ -167,6 +169,7 @@ class QuadTree {
     for (let p of this.points) {
       strokeWeight(4);
       point(p.x, p.y);
+      totalLoopCount++;
     }
   }
 }

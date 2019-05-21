@@ -11,7 +11,7 @@ class Boid {
     this.maxForce = 0.2;
     this.maxSpeed = 4;
     this.color = color(0);
-    this.textfield = new Textfield(x, y);
+    //this.textfield = new Textfield(x, y);
     this.range = 50;
   }
 
@@ -53,6 +53,7 @@ class Boid {
       trajectory.sub(this.velocity);
       trajectory.limit(this.maxForce);
     }
+    totalLoopCount++;
     return trajectory;
   }
 
@@ -78,6 +79,7 @@ class Boid {
       trajectory.sub(this.velocity);
       trajectory.limit(this.maxForce);
     }
+    totalLoopCount++;
     return trajectory;
   }
 
@@ -117,6 +119,7 @@ class Boid {
 
       this.setColor(this.color);
     }
+    totalLoopCount++;
     return trajectory;
   }
 
@@ -143,10 +146,10 @@ class Boid {
     this.velocity.add(this.acceleration);
     this.velocity.limit(this.maxSpeed);
     this.acceleration.mult(0);
-    this.textfield.update(this.position.x, this.position.y);
+    //this.textfield.update(this.position.x, this.position.y);
 
     noStroke();
-    this.textfield.show();
+    //this.textfield.show();
   }
 
   show() {

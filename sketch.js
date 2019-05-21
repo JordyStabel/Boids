@@ -8,6 +8,9 @@ let fps = 0;
 let quadtree;
 let count = 0;
 
+let totalLoopCount = 0;
+let prevCount = 0;
+
 function setup() {
   createCanvas(900, 900);
 
@@ -24,11 +27,14 @@ function setup() {
         5
       )
     );
+    totalLoopCount++;
   }
 
   // Counter
   this.fpsCounter = new FPS(25, 50);
   this.boidCounter = new FPS(25, 100);
+  this.totalLoopCounter = new FPS(25, 150);
+  this.loopsPerSecond = new FPS(25, 200);
 }
 
 function mouseClicked() {
@@ -46,7 +52,7 @@ function draw() {
 
   background(70, 130, 180);
 
-  if (mouseIsPressed && flock.length < 300) {
+  if (mouseIsPressed && flock.length < 500) {
     flock.push(new Boid(mouseX, mouseY, 5));
   }
 
@@ -56,6 +62,7 @@ function draw() {
   for (let boid of flock) {
     let p = new Point(boid.position.x, boid.position.y, boid);
     quadtree.insert(p);
+    totalLoopCount++;
   }
 
   for (let boid of flock) {
@@ -70,6 +77,7 @@ function draw() {
 
     for (let point of foundPoints) {
       inRange.push(point.userData);
+      totalLoopCount++;
     }
 
     boid.edges();
@@ -77,13 +85,22 @@ function draw() {
     boid.update();
 
     boid.show();
+    totalLoopCount++;
   }
 
   quadtree.show();
 
-  // One second timer
+  // 1/3 second timer
   if (frameCount % 20 == 0) {
     this.fpsCounter.update(`FPS: ${int(frameRate())}`);
+  }
+
+  // One second timer
+  if (frameCount % 60 == 0) {
+    this.loopsPerSecond.update(
+      `${int((totalLoopCount - prevCount) / 60)} Loop/sec`
+    );
+    prevCount = totalLoopCount;
   }
 
   count = 0;
@@ -102,10 +119,12 @@ function draw() {
     strokeWeight(6);
     stroke(255, 0, 255);
     point(p.x, p.y);
+    totalLoopCount++;
   }
   for (let p of points) {
     stroke(0, 255, 0);
     point(p.x, p.y);
+    totalLoopCount++;
   }
   // console.log(count);
   // console.log(trees);
@@ -124,10 +143,14 @@ function draw() {
       tree.boundary.w * 2,
       tree.boundary.h * 2
     );
+    totalLoopCount++;
   }
 
   noStroke();
   this.fpsCounter.show();
   this.boidCounter.update(`# ${flock.length}`);
   this.boidCounter.show();
+  this.totalLoopCounter.update(`# ${totalLoopCount}`);
+  this.totalLoopCounter.show();
+  this.loopsPerSecond.show();
 }
