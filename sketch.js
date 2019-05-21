@@ -19,15 +19,15 @@ function setup() {
   this.fpsCounter = new FPS();
 
   // Quadtree stuff
-  let boundary = new Rectangle(450, 450, 450, 450);
-  quadtree = new QuadTree(boundary, 4);
+  // let boundary = new Rectangle(450, 450, 450, 450);
+  // quadtree = new QuadTree(boundary, 4);
 
-  for (let i = 0; i < 300; i++) {
-    let x = randomGaussian(width / 2, width / 8);
-    let y = randomGaussian(height / 2, height / 8);
-    let p = new Point(x, y);
-    quadtree.insert(p);
-  }
+  // for (let i = 0; i < 300; i++) {
+  //   let x = randomGaussian(width / 2, width / 8);
+  //   let y = randomGaussian(height / 2, height / 8);
+  //   let p = new Point(x, y);
+  //   quadtree.insert(p);
+  // }
 }
 
 function mouseClicked() {
@@ -58,6 +58,9 @@ function draw() {
 
   background(70, 130, 180);
 
+  let boundary = new Rectangle(450, 450, 450, 450);
+  quadtree = new QuadTree(boundary, 4);
+
   quadtree.show();
 
   if (mouseIsPressed && flock.length < 200) {
@@ -65,9 +68,18 @@ function draw() {
   }
 
   for (let boid of flock) {
+    let range = new Rectangle(boid.position.x, boid.position.y, 2, 2);
+    let points = [];
+    let searchedPoints = [];
+    let trees = [];
+    let others = quadtree.query(range, points, searchedPoints, trees);
     boid.edges();
-    boid.flock(flock);
+    boid.flock(others);
     boid.update();
+
+    let p = new Point(boid.position.x, boid.position.y, boid);
+    quadtree.insert(p);
+
     boid.show();
   }
 
