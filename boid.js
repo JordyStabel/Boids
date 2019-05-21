@@ -1,10 +1,10 @@
 let neighbours = [];
 let noNeighour = true;
-let size = 5;
 
 class Boid {
-  constructor(x, y) {
+  constructor(x, y, size) {
     this.position = createVector(x, y);
+    this.size = size;
     this.velocity = p5.Vector.random2D();
     this.velocity.setMag(random(2, 4));
     this.acceleration = createVector();
@@ -152,8 +152,8 @@ class Boid {
   }
 
   show() {
-    strokeWeight(this.size);
-    stroke(this.color);
-    point(this.position.x, this.position.y);
+    noStroke();
+    fill(this.color);
+    ellipse(this.position.x, this.position.y, this.size);
   }
 }
