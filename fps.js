@@ -10,8 +10,8 @@ class FPS {
   }
 
   show() {
-    fill(255, 255, 0);
-    textSize(36);
+    fill(0);
+    textSize(25);
     text(this.fps, this.x, this.y);
   }
 }

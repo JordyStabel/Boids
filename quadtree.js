@@ -70,12 +70,33 @@ class Circle {
   }
 }
 
+let colors = [
+  "#1abc9c",
+  "#2ecc71",
+  "#3498db",
+  "#9b59b6",
+  "#34495e",
+  "#f1c40f",
+  "#e67e22",
+  "#e74c3c",
+  "#7f8c8d",
+  "#f39c12"
+];
+
 class QuadTree {
   constructor(boundary, capacity) {
     this.boundary = boundary;
     this.capacity = capacity;
     this.points = [];
+    this.color =
+      colors[
+        treeCount
+          .toString()
+          .split("")
+          .pop()
+      ];
     this.divided = false;
+    treeCount++;
   }
 
   subDivide() {
@@ -102,6 +123,7 @@ class QuadTree {
 
     if (this.points.length < this.capacity) {
       this.points.push(point);
+      point.userData.setColor(this.color);
       return true;
     }
 
@@ -148,8 +170,8 @@ class QuadTree {
   }
 
   show() {
-    stroke(255);
-    strokeWeight(0.5);
+    stroke(this.color);
+    strokeWeight(tiny ? 0.1 : this.points.length);
     noFill();
     rectMode(CENTER);
     rect(
@@ -166,10 +188,10 @@ class QuadTree {
       this.southWest.show();
     }
 
-    for (let p of this.points) {
-      strokeWeight(4);
-      point(p.x, p.y);
-      totalLoopCount++;
-    }
+    // for (let p of this.points) {
+    //   strokeWeight(4);
+    //   point(p.x, p.y);
+    //   totalLoopCount++;
+    // }
   }
 }

@@ -104,7 +104,7 @@ class Boid {
       } else {
         neighbours.splice(neighbours.indexOf(other), 1);
         this.noNeighour = true;
-        this.setColor(0);
+        //this.setColor(0);
       }
     }
     if (inRange > 0) {
@@ -115,9 +115,9 @@ class Boid {
 
       this.size = 5 + inRange / 4;
 
-      this.color = color(inRange * 10);
+      //this.color = color(inRange * 10);
 
-      this.setColor(this.color);
+      //this.setColor(this.color);
     }
     totalLoopCount++;
     return trajectory;
@@ -155,6 +155,10 @@ class Boid {
   show() {
     noStroke();
     fill(this.color);
-    ellipse(this.position.x, this.position.y, this.size);
+    ellipse(
+      this.position.x,
+      this.position.y,
+      tiny ? 1 : Math.pow(this.size, 1.5)
+    );
   }
 }
