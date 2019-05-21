@@ -12,6 +12,7 @@ class Boid {
     this.maxSpeed = 4;
     this.color = color(0);
     this.textfield = new Textfield(x, y);
+    this.range = 50;
   }
 
   edges() {
@@ -28,8 +29,7 @@ class Boid {
   }
 
   align(boids) {
-    // Get the average velocity of all surrounding boids in a certain range from the 'main' boid
-    let range = 50;
+    // Get the average velocity of all surrounding boids in a certain range from the 'main' boid\
     let trajectory = createVector();
     let inRange = 0;
     for (let other of boids) {
@@ -39,7 +39,7 @@ class Boid {
         other.position.x,
         other.position.y
       );
-      if (other != this && distance < range) {
+      if (other != this && distance < this.range) {
         trajectory.add(other.velocity);
         inRange++;
       }
@@ -57,7 +57,6 @@ class Boid {
   }
 
   cohesion(boids) {
-    let range = 100;
     let trajectory = createVector();
     let inRange = 0;
     for (let other of boids) {
@@ -67,7 +66,7 @@ class Boid {
         other.position.x,
         other.position.y
       );
-      if (other != this && distance < range) {
+      if (other != this && distance < this.range) {
         trajectory.add(other.position);
         inRange++;
       }
@@ -83,7 +82,6 @@ class Boid {
   }
 
   separation(boids) {
-    let range = 100;
     let trajectory = createVector();
     let inRange = 0;
     for (let other of boids) {
@@ -93,7 +91,7 @@ class Boid {
         other.position.x,
         other.position.y
       );
-      if (other != this && distance < range) {
+      if (other != this && distance < this.range) {
         let difference = p5.Vector.sub(this.position, other.position);
         difference.div(pow(distance, 2));
         trajectory.add(difference);

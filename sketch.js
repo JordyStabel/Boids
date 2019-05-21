@@ -26,8 +26,9 @@ function setup() {
     );
   }
 
-  // FPS counter
-  this.fpsCounter = new FPS();
+  // Counter
+  this.fpsCounter = new FPS(25, 50);
+  this.boidCounter = new FPS(25, 100);
 }
 
 function mouseClicked() {
@@ -43,22 +44,11 @@ function draw() {
     return;
   }
 
-  // if (
-  //   mouseIsPressed &&
-  //   mouseX < quadtree.boundary.w * 2 &&
-  //   mouseX > 0 &&
-  //   mouseY < quadtree.boundary.h * 2 &&
-  //   mouseY > 0
-  // ) {
-  //   let m = new Point(mouseX, mouseY);
-  //   quadtree.insert(m);
-  // }
-
   background(70, 130, 180);
 
-  // if (mouseIsPressed && flock.length < 200) {
-  //   flock.push(new Boid(mouseX, mouseY, 5));
-  // }
+  if (mouseIsPressed && flock.length < 300) {
+    flock.push(new Boid(mouseX, mouseY, 5));
+  }
 
   let boundary = new Rectangle(width / 2, height / 2, width / 2, height / 2);
   quadtree = new QuadTree(boundary, 4);
@@ -69,26 +59,21 @@ function draw() {
   }
 
   for (let boid of flock) {
-    //let range = new Circle(boid.position.x, boid.position.y, boid.size);
-    let range = new Circle(boid.position.x, boid.position.y, boid.size * 2);
+    let range = new Circle(boid.position.x, boid.position.y, boid.range);
 
     let foundPoints = [];
     let searchedPoints = [];
     let trees = [];
-    let others = quadtree.query(range, foundPoints, searchedPoints, trees);
+    quadtree.query(range, foundPoints, searchedPoints, trees);
 
-    let test = foundPoints;
-    console.log(foundPoints);
+    let inRange = [];
 
-    let neighbours = [];
-
-    for (let neighbour of others.foundPoints) {
-      neighbours.push(neighbour.userData);
-      //console.log(neighbour.userData);
+    for (let point of foundPoints) {
+      inRange.push(point.userData);
     }
 
     boid.edges();
-    boid.flock(neighbours);
+    boid.flock(inRange);
     boid.update();
 
     boid.show();
@@ -98,49 +83,51 @@ function draw() {
 
   // One second timer
   if (frameCount % 20 == 0) {
-    this.fpsCounter.update(frameRate());
+    this.fpsCounter.update(`FPS: ${int(frameRate())}`);
   }
 
   count = 0;
 
-  // noFill();
-  // stroke(0, 255, 0);
-  // strokeWeight(2);
-  // rectMode(CENTER);
-  // let range = new Rectangle(mouseX, mouseY, width / 8, height / 8);
-  // rect(range.x, range.y, range.w * 2, range.h * 2);
-  // let points = [];
-  // let searchedPoints = [];
-  // let trees = [];
-  // quadtree.query(range, points, searchedPoints, trees);
-  // for (let p of searchedPoints) {
-  //   strokeWeight(6);
-  //   stroke(255, 0, 255);
-  //   point(p.x, p.y);
-  // }
-  // for (let p of points) {
-  //   stroke(0, 255, 0);
-  //   point(p.x, p.y);
-  // }
+  noFill();
+  stroke(0, 255, 0);
+  strokeWeight(2);
+  rectMode(CENTER);
+  let range = new Rectangle(mouseX, mouseY, width / 8, height / 8);
+  rect(range.x, range.y, range.w * 2, range.h * 2);
+  let points = [];
+  let searchedPoints = [];
+  let trees = [];
+  quadtree.query(range, points, searchedPoints, trees);
+  for (let p of searchedPoints) {
+    strokeWeight(6);
+    stroke(255, 0, 255);
+    point(p.x, p.y);
+  }
+  for (let p of points) {
+    stroke(0, 255, 0);
+    point(p.x, p.y);
+  }
   // console.log(count);
   // console.log(trees);
   // console.log(searchedPoints);
   // console.log(points);
 
   // Draw boundaries of searched quadtrees
-  // stroke(255, 255, 0);
-  // strokeWeight(1.5);
-  // noFill();
-  // rectMode(CENTER);
-  // for (let tree of trees) {
-  //   rect(
-  //     tree.boundary.x,
-  //     tree.boundary.y,
-  //     tree.boundary.w * 2,
-  //     tree.boundary.h * 2
-  //   );
-  // }
+  stroke(255, 255, 0);
+  strokeWeight(1.5);
+  noFill();
+  rectMode(CENTER);
+  for (let tree of trees) {
+    rect(
+      tree.boundary.x,
+      tree.boundary.y,
+      tree.boundary.w * 2,
+      tree.boundary.h * 2
+    );
+  }
 
   noStroke();
   this.fpsCounter.show();
+  this.boidCounter.update(`# ${flock.length}`);
+  this.boidCounter.show();
 }

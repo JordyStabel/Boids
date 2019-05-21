@@ -1,5 +1,7 @@
 class FPS {
-  constructor() {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
     this.fps = 0;
   }
 
@@ -10,6 +12,6 @@ class FPS {
   show() {
     fill(255, 255, 0);
     textSize(36);
-    text(`${int(this.fps)}`, 25, 50);
+    text(this.fps, this.x, this.y);
   }
 }
