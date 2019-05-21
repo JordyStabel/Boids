@@ -8,6 +8,7 @@ class FPS {
   }
 
   show() {
+    fill(255, 255, 0);
     textSize(36);
     text(`${int(this.fps)}`, 25, 50);
   }
