@@ -6,6 +6,7 @@ let alignSlider, cohesionSlider, seperationSlider;
 
 let fps = 0;
 let quadtree;
+let count = 0;
 
 function setup() {
   createCanvas(900, 900);
@@ -42,24 +43,24 @@ function draw() {
     return;
   }
 
-  if (
-    mouseIsPressed &&
-    mouseX < quadtree.boundary.w * 2 &&
-    mouseX > 0 &&
-    mouseY < quadtree.boundary.h * 2 &&
-    mouseY > 0
-  ) {
-    for (let i = 0; i < 5; i++) {
-      let m = new Point(mouseX, mouseY);
-      quadtree.insert(m);
-    }
-  }
+  // if (
+  //   mouseIsPressed &&
+  //   mouseX < quadtree.boundary.w * 2 &&
+  //   mouseX > 0 &&
+  //   mouseY < quadtree.boundary.h * 2 &&
+  //   mouseY > 0
+  // ) {
+  //   for (let i = 0; i < 5; i++) {
+  //     let m = new Point(mouseX, mouseY);
+  //     quadtree.insert(m);
+  //   }
+  // }
 
   background(70, 130, 180);
 
   quadtree.show();
 
-  if (mouseIsPressed && flock.length < 80) {
+  if (mouseIsPressed && flock.length < 200) {
     flock.push(new Boid(mouseX, mouseY));
   }
 
@@ -70,14 +71,51 @@ function draw() {
     boid.show();
   }
 
+  // One second timer
   if (frameCount % 20 == 0) {
     this.fpsCounter.update(frameRate());
   }
 
+  count = 0;
+
+  noFill();
+  stroke(0, 255, 0);
+  strokeWeight(2);
+  rectMode(CENTER);
+  let range = new Rectangle(mouseX, mouseY, width / 8, height / 8);
+  rect(range.x, range.y, range.w * 2, range.h * 2);
+  let points = [];
+  let searchedPoints = [];
+  let trees = [];
+  quadtree.query(range, points, searchedPoints, trees);
+  for (let p of searchedPoints) {
+    strokeWeight(6);
+    stroke(255, 0, 255);
+    point(p.x, p.y);
+  }
+  for (let p of points) {
+    stroke(0, 255, 0);
+    point(p.x, p.y);
+  }
+  // console.log(count);
+  // console.log(trees);
+  // console.log(searchedPoints);
+  // console.log(points);
+
+  // Draw boundaries of searched quadtrees
+  stroke(255, 255, 0);
+  strokeWeight(1.5);
+  noFill();
+  rectMode(CENTER);
+  for (let tree of trees) {
+    rect(
+      tree.boundary.x,
+      tree.boundary.y,
+      tree.boundary.w * 2,
+      tree.boundary.h * 2
+    );
+  }
+
   noStroke();
   this.fpsCounter.show();
-
-  // noStroke();
-  // textSize(36);
-  // text(`${int(frameRate())}`, 25, 55);
 }

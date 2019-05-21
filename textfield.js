@@ -9,7 +9,7 @@ class Textfield {
   }
 
   show() {
-    fill(0);
+    fill(255);
     textSize(12);
     text(
       `[${int([this.position.x])},${int([this.position.y])}]`,
