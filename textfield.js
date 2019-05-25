@@ -10,8 +10,6 @@ class Textfield {
   }
 
   show() {
-    fill(0);
-    textSize(4);
     text(`${this.id}`, this.position.x, this.position.y);
   }
 }

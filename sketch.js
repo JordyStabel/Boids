@@ -54,6 +54,7 @@ function setup() {
   this.boidCounter = new FPS(25, 80);
   this.totalLoopCounter = new FPS(25, 120);
   this.loopsPerSecond = new FPS(25, 160);
+  this.info = new Textfield();
 }
 
 function mouseClicked() {
@@ -231,8 +232,20 @@ function draw() {
   let searchedPoints = [];
   let trees = [];
   quadtree.query(range, points, searchedPoints, trees);
+
+  // Show info
+  noStroke();
+  this.info.update(
+    `PF: ${points.length}, PS: ${searchedPoints.length} & T: ${trees.length}`,
+    mouseX,
+    mouseY - height / 8
+  );
+  fill(0);
+  textSize(14);
+  this.info.show();
+
   for (let p of searchedPoints) {
-    strokeWeight(6);
+    strokeWeight(10);
     stroke(255, 0, 255);
     point(p.x, p.y);
     totalLoopCount++;
@@ -249,7 +262,7 @@ function draw() {
 
   //Draw boundaries of searched quadtrees
   stroke(255, 255, 0);
-  strokeWeight(1.5);
+  strokeWeight(2.5);
   noFill();
   rectMode(CENTER);
   for (let tree of trees) {

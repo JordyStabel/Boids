@@ -163,6 +163,8 @@ class Boid {
     );
 
     // Show id
+    fill(0);
+    textSize(4);
     this.textfield.update(this.id, this.position.x, this.position.y);
     this.textfield.show();
   }
