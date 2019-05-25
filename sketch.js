@@ -38,7 +38,7 @@ function setup() {
   seperationSlider = createSlider(0, 2, 1, 0.1);
 
   // Create a flock of boids
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 4; i++) {
     flock.push(
       new Boid(
         randomGaussian(width / 2, width / 8),
@@ -129,77 +129,6 @@ function keyReleased() {
   }
 }
 
-function hsvToRgb(h, s, v) {
-  var r, g, b;
-  var i;
-  var f, p, q, t;
-
-  // Make sure our arguments stay in-range
-  h = Math.max(0, Math.min(360, h));
-  s = Math.max(0, Math.min(100, s));
-  v = Math.max(0, Math.min(100, v));
-
-  // We accept saturation and value arguments from 0 to 100 because that's
-  // how Photoshop represents those values. Internally, however, the
-  // saturation and value are calculated from a range of 0 to 1. We make
-  // That conversion here.
-  s /= 100;
-  v /= 100;
-
-  if (s == 0) {
-    // Achromatic (grey)
-    r = g = b = v;
-    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-  }
-
-  h /= 60; // sector 0 to 5
-  i = Math.floor(h);
-  f = h - i; // factorial part of h
-  p = v * (1 - s);
-  q = v * (1 - s * f);
-  t = v * (1 - s * (1 - f));
-
-  switch (i) {
-    case 0:
-      r = v;
-      g = t;
-      b = p;
-      break;
-
-    case 1:
-      r = q;
-      g = v;
-      b = p;
-      break;
-
-    case 2:
-      r = p;
-      g = v;
-      b = t;
-      break;
-
-    case 3:
-      r = p;
-      g = q;
-      b = v;
-      break;
-
-    case 4:
-      r = t;
-      g = p;
-      b = v;
-      break;
-
-    default:
-      // case 5:
-      r = v;
-      g = p;
-      b = q;
-  }
-
-  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-}
-
 function draw() {
   translate(width / 2, height / 2);
   scale(zoom);
@@ -224,10 +153,6 @@ function draw() {
     xPan += 4 / zoom;
   }
 
-  //let rgb = hsvToRgb(h, 25, 100);
-
-  // Turn of for debugging
-  //background(rgb[0], rgb[1], rgb[2]);
   background(255);
 
   if (h > 360) {
@@ -296,46 +221,46 @@ function draw() {
 
   count = 0;
 
-  // noFill();
-  // stroke(0, 255, 0);
-  // strokeWeight(2);
-  // rectMode(CENTER);
-  // let range = new Rectangle(mouseX, mouseY, width / 8, height / 8);
-  // rect(range.x, range.y, range.w * 2, range.h * 2);
-  // let points = [];
-  // let searchedPoints = [];
-  // let trees = [];
-  // quadtree.query(range, points, searchedPoints, trees);
-  // for (let p of searchedPoints) {
-  //   strokeWeight(6);
-  //   stroke(255, 0, 255);
-  //   point(p.x, p.y);
-  //   totalLoopCount++;
-  // }
-  // for (let p of points) {
-  //   stroke(0, 255, 0);
-  //   point(p.x, p.y);
-  //   totalLoopCount++;
-  // }
+  noFill();
+  stroke(0, 255, 0);
+  strokeWeight(2);
+  rectMode(CENTER);
+  let range = new Rectangle(mouseX, mouseY, width / 8, height / 8);
+  rect(range.x, range.y, range.w * 2, range.h * 2);
+  let points = [];
+  let searchedPoints = [];
+  let trees = [];
+  quadtree.query(range, points, searchedPoints, trees);
+  for (let p of searchedPoints) {
+    strokeWeight(6);
+    stroke(255, 0, 255);
+    point(p.x, p.y);
+    totalLoopCount++;
+  }
+  for (let p of points) {
+    stroke(0, 255, 0);
+    point(p.x, p.y);
+    totalLoopCount++;
+  }
   // console.log(count);
   // console.log(trees);
   // console.log(searchedPoints);
   // console.log(points);
 
-  // Draw boundaries of searched quadtrees
-  // stroke(255, 255, 0);
-  // strokeWeight(1.5);
-  // noFill();
-  // rectMode(CENTER);
-  // for (let tree of trees) {
-  //   rect(
-  //     tree.boundary.x,
-  //     tree.boundary.y,
-  //     tree.boundary.w * 2,
-  //     tree.boundary.h * 2
-  //   );
-  //   totalLoopCount++;
-  // }
+  //Draw boundaries of searched quadtrees
+  stroke(255, 255, 0);
+  strokeWeight(1.5);
+  noFill();
+  rectMode(CENTER);
+  for (let tree of trees) {
+    rect(
+      tree.boundary.x,
+      tree.boundary.y,
+      tree.boundary.w * 2,
+      tree.boundary.h * 2
+    );
+    totalLoopCount++;
+  }
 
   noStroke();
   this.fpsCounter.show();

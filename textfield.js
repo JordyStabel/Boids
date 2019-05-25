@@ -3,18 +3,15 @@ class Textfield {
     this.position = createVector(x, y);
   }
 
-  update(x, y) {
+  update(id, x, y) {
+    this.id = id;
     this.position.x = x;
     this.position.y = y;
   }
 
   show() {
-    fill(255);
-    textSize(12);
-    text(
-      `[${int([this.position.x])},${int([this.position.y])}]`,
-      this.position.x,
-      this.position.y
-    );
+    fill(0);
+    textSize(4);
+    text(`${this.id}`, this.position.x, this.position.y);
   }
 }

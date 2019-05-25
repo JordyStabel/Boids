@@ -96,6 +96,7 @@ class QuadTree {
           .pop()
       ];
     this.divided = false;
+    this.id = treeCount;
     treeCount++;
   }
 
@@ -124,6 +125,7 @@ class QuadTree {
     if (this.points.length < this.capacity) {
       this.points.push(point);
       point.userData.setColor(this.color);
+      point.userData.setId(this.id);
       return true;
     }
 
@@ -170,16 +172,22 @@ class QuadTree {
   }
 
   show() {
+    let x = this.boundary.x;
+    let y = this.boundary.y;
+
     stroke(this.color);
-    strokeWeight(tiny ? 0.1 : this.points.length);
+    strokeWeight(
+      tiny ? 0.1 : this.points.length <= 0 ? 0.5 : this.points.length
+    );
     noFill();
     rectMode(CENTER);
-    rect(
-      this.boundary.x,
-      this.boundary.y,
-      this.boundary.w * 2,
-      this.boundary.h * 2
-    );
+    rect(x, y, this.boundary.w * 2, this.boundary.h * 2);
+
+    // Show id
+    noStroke();
+    fill(this.color);
+    textSize(16);
+    text(this.id, x, y);
 
     if (this.divided) {
       this.northEast.show();
@@ -187,11 +195,5 @@ class QuadTree {
       this.southEast.show();
       this.southWest.show();
     }
-
-    // for (let p of this.points) {
-    //   strokeWeight(4);
-    //   point(p.x, p.y);
-    //   totalLoopCount++;
-    // }
   }
 }
