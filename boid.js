@@ -9,7 +9,7 @@ class Boid {
     this.velocity.setMag(random(2, 4));
     this.acceleration = createVector();
     this.maxForce = 0.2;
-    this.maxSpeed = 4;
+    this.maxSpeed = 3.5;
     this.color = color(0);
     this.textfield = new Textfield("NaN");
     this.range = 50;
@@ -30,7 +30,7 @@ class Boid {
   }
 
   align(boids) {
-    // Get the average velocity of all surrounding boids in a certain range from the 'main' boid\
+    // Get the average velocity of all surrounding boids in a certain range from the 'main' boid
     let trajectory = createVector();
     let inRange = 0;
     for (let other of boids) {
@@ -105,7 +105,6 @@ class Boid {
       } else {
         neighbours.splice(neighbours.indexOf(other), 1);
         this.noNeighour = true;
-        //this.setColor(0);
       }
     }
     if (inRange > 0) {
@@ -115,10 +114,6 @@ class Boid {
       trajectory.limit(this.maxForce);
 
       this.size = 5 + inRange / 4;
-
-      //this.color = color(inRange * 10);
-
-      //this.setColor(this.color);
     }
     totalLoopCount++;
     return trajectory;
@@ -159,13 +154,15 @@ class Boid {
     ellipse(
       this.position.x,
       this.position.y,
-      tiny ? 1 : Math.pow(this.size, 1.5)
+      tiny ? 5 : Math.pow(this.size, 1.5)
     );
 
-    // Show id
-    fill(0);
-    textSize(4);
-    this.textfield.update(this.id, this.position.x, this.position.y);
-    this.textfield.show();
+    if (showIds) {
+      // Show id
+      fill(0);
+      textSize(4);
+      this.textfield.update(this.id, this.position.x, this.position.y);
+      this.textfield.show();
+    }
   }
 }

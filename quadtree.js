@@ -119,14 +119,14 @@ class QuadTree {
 
   insert(point) {
     if (!this.boundary.contains(point)) {
-      return false;
+      return;
     }
 
     if (this.points.length < this.capacity) {
       this.points.push(point);
       point.userData.setColor(this.color);
       point.userData.setId(this.id);
-      return true;
+      return;
     }
 
     if (!this.divided) {
